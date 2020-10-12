@@ -24,8 +24,8 @@ namespace SystemMenu.Controllers
         [HttpGet]
         public IActionResult GetMenuList() 
         {
-            var menu = _dbContext.systemMenus.ToList();
-            return new JsonResult(new { code = 0, msg = "", count = menu.Count, menu });
+            var data = _dbContext.systemMenus.ToList();
+            return new JsonResult(new { code = 0, msg = "", count = data.Count, data });
         }
     }
 }

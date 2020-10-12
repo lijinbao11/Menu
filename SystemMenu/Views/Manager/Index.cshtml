@@ -65,24 +65,24 @@
         });
 
         // 监听搜索操作
-        form.on('submit(data-search-btn)', function (data) {
-            var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
-            });
+        //form.on('submit(data-search-btn)', function (data) {
+        //    var result = JSON.stringify(data.field);
+        //    layer.alert(result, {
+        //        title: '最终的搜索信息'
+        //    });
 
-            //执行搜索重载
-            table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    searchParams: result
-                }
-            }, 'data');
+        //    //执行搜索重载
+        //    table.reload('currentTableId', {
+        //        page: {
+        //            curr: 1
+        //        }
+        //        , where: {
+        //            searchParams: result
+        //        }
+        //    }, 'data');
 
-            return false;
-        });
+        //    return false;
+        //});
 
         /**
          * toolbar监听事件
