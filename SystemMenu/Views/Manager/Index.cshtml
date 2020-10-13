@@ -96,7 +96,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '../page/table/add.html',
+                    content: '/Manager/Add',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -131,9 +131,24 @@
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
+                layer.msg('删除' + data.id);
+                layer.confirm('确定删除这行数据么?', function (index) {
+                    $.get('/Manager/Delete/' + data.id,
+                        function (result) {
+                            if (result.success) {
+                                layer.alert(result.msg, { icon: 1 }, function () {
+                                    layer.close(index);
+                                    location.reload();
+                                });
+                            } else {
+                                layer.msg(result.msg, { icon: 2 });
+                            }
+                        });
+
+
+
+                    //obj.del();
+                    //layer.close(index);
                 });
             }
         });
