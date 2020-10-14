@@ -34,10 +34,11 @@
         </div>
     </div>
     <script src="~/lib/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
-    <script>layui.use(['form', 'table'], function () {
-        var $ = layui.jquery,
-            form = layui.form,
-            table = layui.table;
+    <script>
+        layui.use(['table'], function () {
+            var $ = layui.jquery,
+                table = layui.table;
+                //miniPage = layui.miniPage;
 
         table.render({
             elem: '#currentTableId',
@@ -71,29 +72,29 @@
             page: true,
             skin: 'line'
         });
+    
+        /* 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            layer.alert(result, {
+                title: '最终的搜索信息'
+            });
 
-        // 监听搜索操作
-        //form.on('submit(data-search-btn)', function (data) {
-        //    var result = JSON.stringify(data.field);
-        //    layer.alert(result, {
-        //        title: '最终的搜索信息'
-        //    });
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: result
+                }
+            }, 'data');
 
-        //    //执行搜索重载
-        //    table.reload('currentTableId', {
-        //        page: {
-        //            curr: 1
-        //        }
-        //        , where: {
-        //            searchParams: result
-        //        }
-        //    }, 'data');
-
-        //    return false;
-        //});
+            return false;
+        });*/
 
         /**
-         * toolbar监听事件
+         * toolbar监听事件 (添加,批量删除)
          */
         table.on('toolbar(currentTableFilter)', function (obj) {
             if (obj.event === 'add') {  // 监听添加操作
@@ -111,9 +112,6 @@
                 });
             } else if (obj.event === 'delete') {  // 监听删除操作
                 var checkStatus = table.checkStatus('currentTableId'),
-                   
-              
-                
                 //获取锁选中行的数据 
                  datas = checkStatus.data;
                 //定义数据存放批量行的ID
@@ -137,14 +135,8 @@
                                     layer.msg(result.msg, { icon: 2 });
                                 }
                             });
-                    });
-                
-
-
+                    }); 
                 }
-
-           
-
             }
         });
 
@@ -153,10 +145,14 @@
             console.log(obj)
         });
 
+
+        //表单 删除或编辑
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
-
+                //定义一个跳转路径
+                //var content = miniPage.getHrefContent('/Manager/Edit/' + data.Id);
+                //var openWH = miniPage.getOpenWidthHeight();
                 var index = layer.open({
                     title: '编辑用户',
                     type: 2,
@@ -164,7 +160,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '../page/table/edit.html',
+                    content: '/Manager/Edit/' +data.id,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -184,11 +180,6 @@
                                 layer.msg(result.msg, { icon: 2 });
                             }
                         });
-
-
-
-                    //obj.del();
-                    //layer.close(index);
                 });
             }
         });

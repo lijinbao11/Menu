@@ -57,6 +57,7 @@ namespace SystemMenu.Controllers
         }
         #endregion
 
+        #region 删除 /批量删除
         [HttpGet]
         public IActionResult Delete(string id)
         {
@@ -79,32 +80,41 @@ namespace SystemMenu.Controllers
                 return Json(new { success = true, msg = "删除成功" });
             }
             return Json(new { success = false, msg = "提交数据有误，请重新提交" });
+            
+            /*var manager = await _dbContext.managers.FindAsync(Ids);
+            if (manager == null)
+            {
+                return Json(new { sussess = false, msg = "数据不存在或已经删除" });
+            }
 
+            _dbContext.managers.Remove(manager);
 
+            if (_dbContext.SaveChanges() > 0)
+            {
+                return Json(new { success = true, msg = "删除成功" });
+            }
 
-
-
-
-            //var manager = await _dbContext.managers.FindAsync(Ids);
-            //if (manager == null)
-            //{
-            //    return Json(new { sussess = false, msg = "数据不存在或已经删除" });
-            //}
-
-            //_dbContext.managers.Remove(manager);
-
-            //    if ( _dbContext.SaveChanges() > 0)
-            //    {
-            //        return Json(new { success = true, msg = "删除成功" });
-            //    }
-
-            //return Json(new { success = false, msg = "提交数据有误，请重新提交" });
+            return Json(new { success = false, msg = "提交数据有误，请重新提交" });*/
         }
+        #endregion
 
-
-        public IActionResult Edit()
+        #region 修改
+        /// <summary>
+        /// 修改 查询ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult Edit(int id)
         {
-            return View();
+            //var manager = _dbContext.managers.FindAsync(id);
+            var manager = _dbContext.managers.Where(c => c.Id == id).FirstOrDefault();
+            if (manager ==null)
+            {
+                return Redirect("/Home/Index");
+            }
+            return View(manager);
         }
+
+        #endregion
     }
 }

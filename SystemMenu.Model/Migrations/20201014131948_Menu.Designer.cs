@@ -10,7 +10,7 @@ using SystemMenu.Model;
 namespace SystemMenu.Model.Migrations
 {
     [DbContext(typeof(SystemMenuDBContext))]
-    [Migration("20201010011747_Menu")]
+    [Migration("20201014131948_Menu")]
     partial class Menu
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
