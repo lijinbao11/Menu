@@ -54,7 +54,15 @@
                 { field: 'account', width: 80, title: '用户名' },
                 { field: 'password', width: 100, title: '密码' },
                 { field: 'createTime', width: 150, title: '创建时间' },
-                { field: 'isEnable', width: 80, title: '是否启用' },
+                {field: 'isEnable', width: 80, align: 'center', templet: function (d) {
+                        if (d.isEnable == false) {
+                            return '<span class="layui-badge layui-bg-gray">否</span>';
+                        }
+                        else {
+                            return '<span class="layui-badge-rim">是</span>';
+                        }
+                    }, title: '是否启用'
+                },
                 
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
@@ -102,9 +110,41 @@
                     layer.full(index);
                 });
             } else if (obj.event === 'delete') {  // 监听删除操作
-                var checkStatus = table.checkStatus('currentTableId')
-                    , data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
+                var checkStatus = table.checkStatus('currentTableId'),
+                   
+              
+                
+                //获取锁选中行的数据 
+                 datas = checkStatus.data;
+                //定义数据存放批量行的ID
+                var listId = [];
+                //进行遍历所选中行数据,拿出每一行的ID进行存储到数组中 
+                $.each(datas, function (i,data) {
+                    listId.push(data.id)
+                });
+                if (listId.length <= 0) {
+                    layer.msg("请选择要删除的行", { icon: 2 })
+                } else {
+                    layer.confirm('确定删除这行数据么?', function (index) {
+                        $.get('/Manager/Delete/' + listId,
+                            function (result) {
+                                if (result.success) {
+                                    layer.alert(result.msg, { icon: 1 }, function () {
+                                        layer.close(index);
+                                        location.reload();
+                                    });
+                                } else {
+                                    layer.msg(result.msg, { icon: 2 });
+                                }
+                            });
+                    });
+                
+
+
+                }
+
+           
+
             }
         });
 

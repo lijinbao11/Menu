@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SystemMenu.Model;
 using SystemMenu.Model.Entities.Permission;
 
@@ -57,22 +58,47 @@ namespace SystemMenu.Controllers
         #endregion
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(string id)
         {
-            var manager = await _dbContext.managers.FindAsync(id);
-            if (manager == null)
+
+            List<int> Ids = new List<int>();//创建list<int> 保存选中信息的Id 简化操作
+            var ls = id.Split(',');  //根据 , 完成对数组的分组
+            foreach (var item in ls)//foreach 循环遍历添加选中信息的Id
+            {
+                Ids.Add(Convert.ToInt32(item));//返回选中信息的Id
+            }
+            var vm = _dbContext.managers.Where(m => Ids.Contains(m.Id));//获取所要操作的行
+            if (vm == null)
             {
                 return Json(new { sussess = false, msg = "数据不存在或已经删除" });
             }
-
-            _dbContext.managers.Remove(manager);
-
-                if ( _dbContext.SaveChanges() > 0)
-                {
-                    return Json(new { success = true, msg = "删除成功" });
-                }
-
+            vm.ToList().ForEach(t => _dbContext.Entry(t).State = EntityState.Deleted);//利用 Foreach() 方法 循环遍历删除选中行
+            _dbContext.managers.RemoveRange(vm);//完成操作
+            if (_dbContext.SaveChanges() > 0)//返回数据
+            {
+                return Json(new { success = true, msg = "删除成功" });
+            }
             return Json(new { success = false, msg = "提交数据有误，请重新提交" });
+
+
+
+
+
+
+            //var manager = await _dbContext.managers.FindAsync(Ids);
+            //if (manager == null)
+            //{
+            //    return Json(new { sussess = false, msg = "数据不存在或已经删除" });
+            //}
+
+            //_dbContext.managers.Remove(manager);
+
+            //    if ( _dbContext.SaveChanges() > 0)
+            //    {
+            //        return Json(new { success = true, msg = "删除成功" });
+            //    }
+
+            //return Json(new { success = false, msg = "提交数据有误，请重新提交" });
         }
 
 
