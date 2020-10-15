@@ -21,73 +21,84 @@
     </style>
 </head>
 <body>
-        <div class="layui-form layuimini-form">
             <form class="layui-form layuimini-form">
-                @*@Html.HiddenFor(c => c.Id)
-                @Html.HiddenFor(c => c.Account)
-                @Html.HiddenFor(c => c.CreateTime)
-                @Html.HiddenFor(c => c.Password)
-                @Html.HiddenFor(c => c.IsEnable)
-                @Html.AntiForgeryToken()*@
-                <div class="layui-form-item">
-                    <label class="layui-form-label required">用户名</label>
-                    <div class="layui-input-block">
-                        <input type="text" asp-for="Account" placeholder="请输入用户名" lay-verify="required" lay-reqtext="用户名不能为空" class="layui-input">
-                        <tip>填写自己管理账号的名称。</tip>
+                <div class="layui-form ">
+                    @Html.HiddenFor(c => c.Id)
+                    @Html.AntiForgeryToken()
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">用户名</label>
+                        <div class="layui-input-block">
+                            <input type="text" asp-for="Account" placeholder="请输入用户名" lay-verify="required" lay-reqtext="用户名不能为空" class="layui-input">
+                            <tip>填写自己管理账号的名称。</tip>
+                        </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label required">创建时间</label>
-                    <div class="layui-input-block">
-                        <input type="text" asp-for="CreateTime" placeholder="创建时间" lay-verify="required" lay-reqtext="时间不能为空" class="layui-input">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">创建时间</label>
+                        <div class="layui-input-block">
+                            <input type="datetime" asp-for="CreateTime" placeholder="创建时间" lay-verify="required" lay-reqtext="时间不能为空" class="layui-input">
+                        </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label required">密码</label>
-                    <div class="layui-input-block">
-                        <input type="text" asp-for="Password" placeholder="密码" lay-verify="required" lay-reqtext="密码不能为空" class="layui-input">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">密码</label>
+                        <div class="layui-input-block">
+                            <input type="text" asp-for="Password" placeholder="密码" lay-verify="required" lay-reqtext="密码不能为空" class="layui-input">
+                        </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label required">是否启用</label>
-                    <div class="layui-input-block">
-                        <input type="text" asp-for="IsEnable" placeholder="是否启用" lay-verify="required" lay-reqtext="是否启用(TRUE/FALSE)" class="layui-input">
+                    @*通过(checked="") 默认选中*@
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">是否启用</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" asp-for="IsEnable" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+                        </div>
                     </div>
-                </div>
 
 
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                        </div>
                     </div>
                 </div>
             </form>
-        </div>
+
      
         <script src="~/lib/layuimini/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
         <script>
-    layui.use(['form'], function () {
+            layui.use(['form'], function () {
                 var form = layui.form,
                     layer = layui.layer,
                     $ = layui.$;
 
+                /**
+                * 初始化表单，要加上，不然刷新部分组件可能会不加载
+                */
+                form.render();
                 //监听提交
                 form.on('submit(saveBtn)', function (data) {
-                    var index = layer.alert(JSON.stringify(data.field), {
-                        title: '最终的提交信息'
-                    }, function () {
+                    //var index = layer.alert(JSON.stringify(data.field)
+                    $.ajax({
+                        url: '/Manager/Edit',
+                        type: 'post',
+                        data: $(data.form).serialize(),
+                        success: function (obj) {
+                            if (obj.success) {
+                                layer.alert(obj.msg, { icon: 1 },
+                                    function () {
+                                        //刷新父页面
+                                        parent.location.reload();
+                                        //关闭弹出层
+                                        layer.close(layer.index);
+                                    });
 
-                        // 关闭弹出层
-                        layer.close(index);
-
-                        var iframeIndex = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(iframeIndex);
-
+                            } else {
+                                layer.msg(obj.msg, { icon: 2 });
+                            }
+                        }
                     });
-
                     return false;
                 });
 
-            });</script>
+            });
+        </script>
 </body>
 </html>

@@ -86,24 +86,25 @@
             //监听提交
             form.on('submit(saveBtn)', function (data) {
                 //var index = layer.alert(JSON.stringify(data.field)
-                    $.ajax({
-                        url: '/Manager/AddManagers',
-                        type: 'post',
-                        data: $(data.form).serialize(),
-                        success: function (obj) {
-                            if (obj.success) {
-                                layer.alert(obj.msg, { icon: 1 }, function () {
+                $.ajax({
+                    url: '/Manager/AddManagers',
+                    type: 'post',
+                    data: $(data.form).serialize(),
+                    success: function (obj) {
+                        if (obj.success) {
+                            layer.alert(obj.msg, { icon: 1 },
+                                function () {
                                     //刷新父页面
                                     parent.location.reload();
                                     //关闭弹出层
                                     layer.close(layer.index);
                                 });
 
-                            } else {
-                                layer.msg(obj.msg, { icon: 2 });
-                            }
+                        } else {
+                            layer.msg(obj.msg, { icon: 2 });
                         }
-                    });
+                    }
+                });
                 return false;
             });
 

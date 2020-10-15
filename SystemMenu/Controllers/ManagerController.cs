@@ -104,16 +104,38 @@ namespace SystemMenu.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IActionResult Edit(int id)
+        //public IActionResult Edit(int id)
+        //{
+        //    //var manager = _dbContext.managers.FindAsync(id);
+        //    var manager = _dbContext.managers.Where(c => c.Id == id).FirstOrDefault();
+        //    if (manager == null)
+        //    {
+        //        return Redirect("/Home/Index");
+        //    }
+        //    return View(manager);
+        //}
+        public async Task<IActionResult> Edit(int id)
         {
-            //var manager = _dbContext.managers.FindAsync(id);
-            var manager = _dbContext.managers.Where(c => c.Id == id).FirstOrDefault();
-            if (manager ==null)
-            {
+            var manager = await _dbContext.managers.FindAsync(id);
+            if (manager == null)
                 return Redirect("/Home/Index");
-            }
             return View(manager);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Manager manger)
+        {
+            if (ModelState.IsValid)
+            {
+                _dbContext.Update(manger);
+                if (await _dbContext.SaveChangesAsync() > 0)
+                    return Json(new { success = true, msg = "修改成功" });
+                return Json(new { success = false, msg = "修改失败" });
+            }
+            return Json(new { success = false, msg = "提交数据有误，请重新提交" });
+
+        }
+
 
         #endregion
     }
