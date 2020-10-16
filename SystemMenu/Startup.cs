@@ -36,6 +36,7 @@ namespace SystemMenu
                 //options.UseLazyLoadingProxies();//ясЁы╪сть
             });
             #endregion
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +46,7 @@ namespace SystemMenu
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseSession();
             
             app.UseHttpsRedirection();
             app.UseStaticFiles();

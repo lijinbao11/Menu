@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SystemMenu.Model;
@@ -29,6 +30,19 @@ namespace SystemMenu.Controllers
         }
         public IActionResult Index()
         {
+            //获取登录的用户
+            var username = HttpContext.Session.GetString("username");
+            ViewBag.Account = username;
+            //如果session是否为空 如果是空则返回到主页面
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                ViewBag.IsLogin = false;
+                return Redirect("/Home/Login");
+            }
+            else
+            {
+                ViewBag.IsLogin = true;
+            }
             return View();
         }
         public IActionResult Default()
@@ -55,8 +69,8 @@ namespace SystemMenu.Controllers
             //    });
             //#endregion
             //var claimPrincipal = new ClaimsPrincipal(claimIdentity);
-            // HttpContext.SignInAsync(claimPrincipal);
-
+            //HttpContext.SignInAsync(claimPrincipal);
+            HttpContext.Session.SetString("username", username);
             return Json(new { success = true, msg = "登录成功" });
         }
         #endregion
