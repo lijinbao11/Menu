@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,12 +24,34 @@ namespace SystemMenu.Controllers
             return View();
         }
 
+        //[HttpGet]
+        //public IActionResult GetManagers()
+        //{
+        //    var data = _dbContext.managers.ToList();
+        //    return new JsonResult(new { code = 0, msg = "", count = data.Count, data });
+        //}
+
+
         [HttpGet]
-        public IActionResult GetManagers()
+        public async Task<JsonResult> GetManagers(PageHelper pageHelper)
         {
-            var data = _dbContext.managers.ToList();
-            return new JsonResult(new { code = 0, msg = "", count = data.Count, data });
+            pageHelper.Count = await _dbContext.managers.CountAsync();
+            if (pageHelper.Order == "asc")//升序
+            {
+                var data = await _dbContext.managers.OrderBy(c => c.Id).Skip((pageHelper.Page - 1) * pageHelper.Limit).Take(pageHelper.Limit).ToListAsync();
+
+                return new JsonResult(new { code = 0, msg = "", data, count = pageHelper.Count });
+            }
+            //降序
+            else {
+                var data = await _dbContext.managers.OrderByDescending(c => c.Id).Skip((pageHelper.Page - 1) * pageHelper.Limit).Take(pageHelper.Limit).ToListAsync();
+
+                return new JsonResult(new { code = 0, msg = "", data, count = pageHelper.Count });
+            }
+                
         }
+
+       
 
 
         #region 添加
@@ -114,6 +137,9 @@ namespace SystemMenu.Controllers
         //    }
         //    return View(manager);
         //}
+        
+        
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var manager = await _dbContext.managers.FindAsync(id);
@@ -121,7 +147,11 @@ namespace SystemMenu.Controllers
                 return Redirect("/Home/Index");
             return View(manager);
         }
-
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="manger"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Edit(Manager manger)
         {
