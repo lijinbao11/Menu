@@ -161,8 +161,17 @@
 
 
             $('.login-out').on("click", function () {
-                layer.msg('退出登录成功', function () {
-                    window.location = '/Home/Login';
+                $.ajax({
+                    type: "get",
+                    url: "/Home/LoginOut",
+                    success: function (msg) {
+                        if (msg.success) {
+                            layer.msg(msg.msg);
+                            window.location.href = "/Home/Login";
+                        } else {
+                            layer.msg(msg.msg);
+                        }
+                    }
                 });
             });
         });</script>

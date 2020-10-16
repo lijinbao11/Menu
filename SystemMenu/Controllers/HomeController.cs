@@ -70,11 +70,21 @@ namespace SystemMenu.Controllers
             //#endregion
             //var claimPrincipal = new ClaimsPrincipal(claimIdentity);
             //HttpContext.SignInAsync(claimPrincipal);
+            //将用户名存储到session
             HttpContext.Session.SetString("username", username);
             return Json(new { success = true, msg = "登录成功" });
         }
         #endregion
+        #region 登出
+        [HttpGet]
+        public  IActionResult LoginOut()
+        {
+            HttpContext.Session.Clear();
+            return Json(new { success = true, msg = "登出成功" });
+        }
 
+
+        #endregion
 
 
         #region 菜单权限
