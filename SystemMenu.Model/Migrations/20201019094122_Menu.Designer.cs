@@ -10,7 +10,7 @@ using SystemMenu.Model;
 namespace SystemMenu.Model.Migrations
 {
     [DbContext(typeof(SystemMenuDBContext))]
-    [Migration("20201014131948_Menu")]
+    [Migration("20201019094122_Menu")]
     partial class Menu
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,32 @@ namespace SystemMenu.Model.Migrations
                 .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("SystemMenu.Model.Entities.Permission.Loginrecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("COMport")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IPconfig")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ManagerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManagerId");
+
+                    b.ToTable("bee_login_record");
+                });
 
             modelBuilder.Entity("SystemMenu.Model.Entities.Permission.Manager", b =>
                 {
@@ -77,6 +103,13 @@ namespace SystemMenu.Model.Migrations
                     b.HasKey("id");
 
                     b.ToTable("bee_system_menu");
+                });
+
+            modelBuilder.Entity("SystemMenu.Model.Entities.Permission.Loginrecord", b =>
+                {
+                    b.HasOne("SystemMenu.Model.Entities.Permission.Manager", "Manager")
+                        .WithMany()
+                        .HasForeignKey("ManagerId");
                 });
 #pragma warning restore 612, 618
         }

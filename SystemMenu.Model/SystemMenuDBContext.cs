@@ -26,5 +26,6 @@ namespace SystemMenu.Model
 
         public DbSet<SystemMenuEntity> systemMenus { get; set; }
         public DbSet<Manager> managers { get; set; }
+        public DbSet<Loginrecord> loginrecords { get; set; }
     }
 }

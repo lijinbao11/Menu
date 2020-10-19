@@ -19,6 +19,32 @@ namespace SystemMenu.Model.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("SystemMenu.Model.Entities.Permission.Loginrecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("COMport")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IPconfig")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ManagerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManagerId");
+
+                    b.ToTable("bee_login_record");
+                });
+
             modelBuilder.Entity("SystemMenu.Model.Entities.Permission.Manager", b =>
                 {
                     b.Property<int>("Id")
@@ -75,6 +101,13 @@ namespace SystemMenu.Model.Migrations
                     b.HasKey("id");
 
                     b.ToTable("bee_system_menu");
+                });
+
+            modelBuilder.Entity("SystemMenu.Model.Entities.Permission.Loginrecord", b =>
+                {
+                    b.HasOne("SystemMenu.Model.Entities.Permission.Manager", "Manager")
+                        .WithMany()
+                        .HasForeignKey("ManagerId");
                 });
 #pragma warning restore 612, 618
         }
