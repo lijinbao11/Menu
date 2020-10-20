@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SystemMenu.Model;
 using SystemMenu.Model.Entities.Permission;
@@ -59,6 +62,12 @@ namespace SystemMenu.Controllers
                 return Json(new { success = false, msg = "用户不存在，请联系管理员" });
             if (!managers.FirstOrDefault().Password.Equals(password))
                 return Json(new { success = false, msg = "密码错误，请重新输入" });
+            //登录成功,执行将用户名存储到session  每登录一次记录一次
+            //将用户名存储到session
+            HttpContext.Session.SetString("username", username);
+            //将用户ID传给添加登录日志的方法
+            AddLoginrecord(managers.FirstOrDefault().Id);
+            return Json(new { success = true, msg = "登录成功" });
             //#region 生成cookie
             //var claimIdentity = new ClaimsIdentity("Cookie", JwtClaimTypes.Name, JwtClaimTypes.Role);
             //claimIdentity.AddClaims(new List<Claim>()
@@ -70,10 +79,28 @@ namespace SystemMenu.Controllers
             //#endregion
             //var claimPrincipal = new ClaimsPrincipal(claimIdentity);
             //HttpContext.SignInAsync(claimPrincipal);
-            //将用户名存储到session
-            HttpContext.Session.SetString("username", username);
-            return Json(new { success = true, msg = "登录成功" });
         }
+        /// <summary>
+        /// 登录日志
+        /// </summary>
+        /// <param name="id">用户ID</param>
+        private void AddLoginrecord(int id)
+        {
+            Loginrecord loginrecord = new Loginrecord();
+            if (ModelState.IsValid)
+            {
+                //Request.HttpContext.Connection.RemoteIpAddress.ToString()  IPV6
+                //Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+                loginrecord.IPconfig = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+                loginrecord.COMport = Request.HttpContext.Connection.RemotePort;
+                loginrecord.CreateTime = Convert.ToDateTime(DateTime.Now.ToString());
+                loginrecord.Mid =id ;
+                _dbContext.Add(loginrecord);
+                _dbContext.SaveChanges();
+            }
+            
+        }
+
         #endregion
         #region 登出
         [HttpGet]
@@ -85,8 +112,6 @@ namespace SystemMenu.Controllers
 
 
         #endregion
-
-
         #region 菜单权限
         [HttpGet]
         public IActionResult GetMenuList()

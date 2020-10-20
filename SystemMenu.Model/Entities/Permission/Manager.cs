@@ -24,7 +24,6 @@ namespace SystemMenu.Model.Entities.Permission
         /// <summary>
         /// 是否 启用
         /// </summary>
-        public bool IsEnable { get; set; }
-      
+        public bool IsEnable { get; set; }   
     }
 }
