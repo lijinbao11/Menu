@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SystemMenu.Model.Migrations
 {
-    public partial class Menu : Migration
+    public partial class Test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,23 +51,23 @@ namespace SystemMenu.Model.Migrations
                     IPconfig = table.Column<string>(nullable: true),
                     COMport = table.Column<int>(nullable: false),
                     CreateTime = table.Column<DateTime>(nullable: false),
-                    ManagerId = table.Column<int>(nullable: true)
+                    Mid = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_bee_login_record", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_bee_login_record_bee_manager_ManagerId",
-                        column: x => x.ManagerId,
+                        name: "FK_bee_login_record_bee_manager_Mid",
+                        column: x => x.Mid,
                         principalTable: "bee_manager",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_bee_login_record_ManagerId",
+                name: "IX_bee_login_record_Mid",
                 table: "bee_login_record",
-                column: "ManagerId");
+                column: "Mid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

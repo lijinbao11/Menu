@@ -10,8 +10,8 @@ using SystemMenu.Model;
 namespace SystemMenu.Model.Migrations
 {
     [DbContext(typeof(SystemMenuDBContext))]
-    [Migration("20201019094122_Menu")]
-    partial class Menu
+    [Migration("20201021094943_Test")]
+    partial class Test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,12 +37,12 @@ namespace SystemMenu.Model.Migrations
                     b.Property<string>("IPconfig")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ManagerId")
+                    b.Property<int>("Mid")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId");
+                    b.HasIndex("Mid");
 
                     b.ToTable("bee_login_record");
                 });
@@ -108,8 +108,10 @@ namespace SystemMenu.Model.Migrations
             modelBuilder.Entity("SystemMenu.Model.Entities.Permission.Loginrecord", b =>
                 {
                     b.HasOne("SystemMenu.Model.Entities.Permission.Manager", "Manager")
-                        .WithMany()
-                        .HasForeignKey("ManagerId");
+                        .WithMany("Loginrecords")
+                        .HasForeignKey("Mid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

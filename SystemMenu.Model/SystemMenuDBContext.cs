@@ -18,7 +18,8 @@ namespace SystemMenu.Model
 
         protected override  void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.Entity<Manager>().HasMany(c => c.Loginrecords).WithOne(c => c.Manager).HasForeignKey(c => c.Mid);
             base.OnModelCreating(modelBuilder);
         }
 

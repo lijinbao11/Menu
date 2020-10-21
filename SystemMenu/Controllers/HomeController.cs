@@ -94,6 +94,7 @@ namespace SystemMenu.Controllers
                 loginrecord.IPconfig = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
                 loginrecord.COMport = Request.HttpContext.Connection.RemotePort;
                 loginrecord.CreateTime = Convert.ToDateTime(DateTime.Now.ToString());
+                
                 loginrecord.Mid =id ;
                 _dbContext.Add(loginrecord);
                 _dbContext.SaveChanges();

@@ -25,5 +25,7 @@ namespace SystemMenu.Model.Entities.Permission
         /// 是否 启用
         /// </summary>
         public bool IsEnable { get; set; }   
+        
+        public virtual ICollection<Loginrecord> Loginrecords { get; set; }
     }
 }
