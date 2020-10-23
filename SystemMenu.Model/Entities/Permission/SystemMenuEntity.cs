@@ -17,13 +17,12 @@ namespace SystemMenu.Model.Entities.Permission
         /// </summary>
         [Key]
         [Required]
-        public long id { get; set; }
-
+        public int id { get; set; }
         /// <summary>
         /// 父级ID
         /// </summary>
         [Required]
-        public long pid { get; set; }
+        public int pid { get; set; }
         /// <summary>
         /// 名称
         /// </summary>
@@ -44,16 +43,15 @@ namespace SystemMenu.Model.Entities.Permission
         /// 链接
         /// </summary>
         public string target { get; set; }
-
-
         /// <summary>
         /// 序号
         /// </summary>
         public int sort { get; set; }
-
         /// <summary>
         /// 是否菜单
         /// </summary>
         public bool status { get; set; }
+
+        public virtual ICollection<ManagerMenu> ManagerMenus { get; set; }
     }
 }

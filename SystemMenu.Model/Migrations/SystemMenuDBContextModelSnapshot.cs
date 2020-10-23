@@ -69,11 +69,26 @@ namespace SystemMenu.Model.Migrations
                     b.ToTable("bee_manager");
                 });
 
+            modelBuilder.Entity("SystemMenu.Model.Entities.Permission.ManagerMenu", b =>
+                {
+                    b.Property<int>("Mid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Meid")
+                        .HasColumnType("int");
+
+                    b.HasKey("Mid", "Meid");
+
+                    b.HasIndex("Meid");
+
+                    b.ToTable("bee_managerMenu");
+                });
+
             modelBuilder.Entity("SystemMenu.Model.Entities.Permission.SystemMenuEntity", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("href")
@@ -82,8 +97,8 @@ namespace SystemMenu.Model.Migrations
                     b.Property<string>("icon")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("pid")
-                        .HasColumnType("bigint");
+                    b.Property<int>("pid")
+                        .HasColumnType("int");
 
                     b.Property<int>("sort")
                         .HasColumnType("int");
@@ -107,6 +122,21 @@ namespace SystemMenu.Model.Migrations
                 {
                     b.HasOne("SystemMenu.Model.Entities.Permission.Manager", "Manager")
                         .WithMany("Loginrecords")
+                        .HasForeignKey("Mid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SystemMenu.Model.Entities.Permission.ManagerMenu", b =>
+                {
+                    b.HasOne("SystemMenu.Model.Entities.Permission.SystemMenuEntity", "SystemMenu")
+                        .WithMany("ManagerMenus")
+                        .HasForeignKey("Meid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SystemMenu.Model.Entities.Permission.Manager", "Manager")
+                        .WithMany("ManagerMenus")
                         .HasForeignKey("Mid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

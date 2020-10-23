@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SystemMenu.Model.Migrations
 {
-    public partial class Test : Migration
+    public partial class text : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,9 +27,9 @@ namespace SystemMenu.Model.Migrations
                 name: "bee_system_menu",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false)
+                    id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    pid = table.Column<long>(nullable: false),
+                    pid = table.Column<int>(nullable: false),
                     title = table.Column<string>(nullable: false),
                     icon = table.Column<string>(nullable: true),
                     href = table.Column<string>(nullable: true),
@@ -64,16 +64,48 @@ namespace SystemMenu.Model.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "bee_managerMenu",
+                columns: table => new
+                {
+                    Mid = table.Column<int>(nullable: false),
+                    Meid = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_bee_managerMenu", x => new { x.Mid, x.Meid });
+                    table.ForeignKey(
+                        name: "FK_bee_managerMenu_bee_system_menu_Meid",
+                        column: x => x.Meid,
+                        principalTable: "bee_system_menu",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_bee_managerMenu_bee_manager_Mid",
+                        column: x => x.Mid,
+                        principalTable: "bee_manager",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_bee_login_record_Mid",
                 table: "bee_login_record",
                 column: "Mid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_bee_managerMenu_Meid",
+                table: "bee_managerMenu",
+                column: "Meid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "bee_login_record");
+
+            migrationBuilder.DropTable(
+                name: "bee_managerMenu");
 
             migrationBuilder.DropTable(
                 name: "bee_system_menu");

@@ -27,5 +27,7 @@ namespace SystemMenu.Model.Entities.Permission
         public bool IsEnable { get; set; }   
         
         public virtual ICollection<Loginrecord> Loginrecords { get; set; }
+
+        public virtual ICollection<ManagerMenu> ManagerMenus { get; set; }
     }
 }
