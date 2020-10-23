@@ -17,40 +17,40 @@ namespace SystemMenu.Model.Entities.Permission
         /// </summary>
         [Key]
         [Required]
-        public int id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// 父级ID
         /// </summary>
         [Required]
-        public int pid { get; set; }
+        public int Pid { get; set; }
         /// <summary>
         /// 名称
         /// </summary>
         [Required]
-        public string title { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
         /// 菜单图标
         /// </summary>
-        public string icon { get; set; }
+        public string Icon { get; set; }
 
         /// <summary>
         /// 链接
         /// </summary>
-        public string href { get; set; }
+        public string Href { get; set; }
 
         /// <summary>
         /// 链接
         /// </summary>
-        public string target { get; set; }
+        public string Target { get; set; }
         /// <summary>
         /// 序号
         /// </summary>
-        public int sort { get; set; }
+        public int Sort { get; set; }
         /// <summary>
         /// 是否菜单
         /// </summary>
-        public bool status { get; set; }
+        public bool Status { get; set; }
 
         public virtual ICollection<ManagerMenu> ManagerMenus { get; set; }
     }

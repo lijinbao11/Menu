@@ -123,7 +123,7 @@ namespace SystemMenu.Controllers
                 Href = "",
                 Title = "根目录",
             };
-            var systemMenuEntities = _dbContext.systemMenus.Where(s => s.id > 0).ToList();
+            var systemMenuEntities = _dbContext.systemMenus.Where(s => s.Id > 0).ToList();
 
             //将rootNode的Child 赋值返回给 MenusInfoResultDTO.MenuInfo 返回给前端就行
 
@@ -148,7 +148,7 @@ namespace SystemMenu.Controllers
             {
                 return null;
             }
-            var childreDataList = systemMenuEntities.Where(p => p.pid == rootNode.Id);
+            var childreDataList = systemMenuEntities.Where(p => p.Pid == rootNode.Id);
             if (childreDataList != null && childreDataList.Count() > 0)
             {
                 rootNode.Child = new List<SysTemMenus>();
@@ -157,10 +157,10 @@ namespace SystemMenu.Controllers
                 {
                     SysTemMenus treeNode = new SysTemMenus()
                     {
-                        Id = item.id,
-                        Icon = item.icon,
-                        Href = item.href,
-                        Title = item.title,
+                        Id = item.Id,
+                        Icon = item.Icon,
+                        Href = item.Href,
+                        Title = item.Title,
                     };
                     rootNode.Child.Add(treeNode);
                 }

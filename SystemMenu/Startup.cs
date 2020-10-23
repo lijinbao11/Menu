@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using SystemMenu.Filter;
 using SystemMenu.Model;
 
 namespace SystemMenu
@@ -42,7 +42,13 @@ namespace SystemMenu
             #endregion
             services.AddSession();
 
-            services.AddControllersWithViews().AddJsonOptions(
+            services.AddControllersWithViews(
+                options =>
+                {
+                    options.Filters.Add(typeof(LogActionFilter));
+                    options.Filters.Add(typeof(LogErrorFilter));
+                }
+                ).AddJsonOptions(
                 options =>
                 {
                     //options.JsonSerializerOptions.PropertyNamingPolicy = null;//更正json返回首字母小写
