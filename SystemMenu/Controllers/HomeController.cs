@@ -91,10 +91,9 @@ namespace SystemMenu.Controllers
             {
                 //Request.HttpContext.Connection.RemoteIpAddress.ToString()  IPV6
                 //Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
-                loginrecord.IPconfig = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+                loginrecord.IPconfig = Request.HttpContext.Connection.LocalIpAddress.MapToIPv4().ToString();
                 loginrecord.COMport = Request.HttpContext.Connection.RemotePort;
                 loginrecord.CreateTime = Convert.ToDateTime(DateTime.Now.ToString());
-                
                 loginrecord.Mid =id ;
                 _dbContext.Add(loginrecord);
                 _dbContext.SaveChanges();
@@ -136,8 +135,6 @@ namespace SystemMenu.Controllers
                 LogoInfo = new LogoInfo(),
                 HomeInfo = new HomeInfo()
             };
-
-
             return Json(menusInfoResultDTO);
         }
         /// <summary>
@@ -151,7 +148,6 @@ namespace SystemMenu.Controllers
             {
                 return null;
             }
-
             var childreDataList = systemMenuEntities.Where(p => p.pid == rootNode.Id);
             if (childreDataList != null && childreDataList.Count() > 0)
             {

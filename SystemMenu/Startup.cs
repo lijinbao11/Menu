@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using SystemMenu.Model;
 
 namespace SystemMenu
@@ -38,6 +41,15 @@ namespace SystemMenu
             });
             #endregion
             services.AddSession();
+
+            services.AddControllersWithViews().AddJsonOptions(
+                options =>
+                {
+                    //options.JsonSerializerOptions.PropertyNamingPolicy = null;//更正json返回首字母小写
+                    options.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
+                });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,4 +81,27 @@ namespace SystemMenu
             });
         }
     }
+
+    /// <summary>
+    /// .net core 返回时间格式转化
+    /// </summary>
+    public class DatetimeJsonConverter : JsonConverter<DateTime>
+    {
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return DateTime.Parse(reader.GetString());
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        {
+            if (value.Hour == 0 && value.Minute == 0 && value.Second == 0)
+                writer.WriteStringValue(value.ToString("yyyy-MM-dd"));
+            else
+                writer.WriteStringValue(value.ToString("yyyy-MM-dd HH:mm:ss"));
+        }
+    }
+
 }
+
+
+
