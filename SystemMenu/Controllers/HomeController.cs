@@ -118,10 +118,10 @@ namespace SystemMenu.Controllers
         {
             SysTemMenus rootNode = new SysTemMenus()
             {
-                Id = 0,
-                Icon = "",
-                Href = "",
-                Title = "根目录",
+                id = 0,
+                icon = "",
+                href = "",
+                title = "根目录",
             };
             var systemMenuEntities = _dbContext.systemMenus.Where(s => s.Id > 0).ToList();
 
@@ -130,10 +130,10 @@ namespace SystemMenu.Controllers
 
             MenusInfoResultDTO menusInfoResultDTO = new MenusInfoResultDTO()
             {
-                MenuInfo = GetTreeNodeListByNoLockedDTOArray(systemMenuEntities, rootNode),
+                menuInfo = GetTreeNodeListByNoLockedDTOArray(systemMenuEntities, rootNode),
                 //rootNode.Child,
-                LogoInfo = new LogoInfo(),
-                HomeInfo = new HomeInfo()
+                logoInfo = new LogoInfo(),
+                homeInfo = new HomeInfo()
             };
             return Json(menusInfoResultDTO);
         }
@@ -148,7 +148,7 @@ namespace SystemMenu.Controllers
             {
                 return null;
             }
-            var childreDataList = systemMenuEntities.Where(p => p.Pid == rootNode.Id);
+            var childreDataList = systemMenuEntities.Where(p => p.Pid == rootNode.id);
             if (childreDataList != null && childreDataList.Count() > 0)
             {
                 rootNode.Child = new List<SysTemMenus>();
@@ -157,10 +157,10 @@ namespace SystemMenu.Controllers
                 {
                     SysTemMenus treeNode = new SysTemMenus()
                     {
-                        Id = item.Id,
-                        Icon = item.Icon,
-                        Href = item.Href,
-                        Title = item.Title,
+                        id = item.Id,
+                        icon = item.Icon,
+                        href = item.Href,
+                        title = item.Title,
                     };
                     rootNode.Child.Add(treeNode);
                 }
