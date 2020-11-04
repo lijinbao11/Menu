@@ -55,11 +55,11 @@
             skin: 'line',
             cols: [[
                 {type: "checkbox", width: 50},
-                {field: 'id', width: 80, title: 'ID', sort: true},
-                { field: 'account', width: 80, title: '用户名' },
-                { field: 'password', width: 100, title: '密码' },
-                { field: 'createTime', width: 150, title: '创建时间' },
-                {field: 'isEnable', width: 80, align: 'center', templet: function (d) {
+                {field: 'Id', width: 80, title: 'ID', sort: true},
+                { field: 'Account', width: 80, title: '用户名' },
+                { field: 'Password', width: 100, title: '密码' },
+                { field: 'CreateTime', width: 150, title: '创建时间' },
+                {field: 'IsEnable', width: 80, align: 'center', templet: function (d) {
                         if (d.isEnable == false) {
                             return '<span class="layui-badge layui-bg-gray">否</span>';
                         }
