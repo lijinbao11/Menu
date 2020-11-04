@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SystemMenu.Helper;
 using SystemMenu.Model;
 using SystemMenu.Model.Entities.Permission;
 
@@ -69,6 +70,8 @@ namespace SystemMenu.Controllers
         {
             if (ModelState.IsValid)
             {
+                //加密
+                manager.Password = DesEncryptHelper.DesEncrypt(manager.Password);
                 manager.CreateTime = Convert.ToDateTime(DateTime.Now.ToString());
                 manager.IsEnable = true;
                 _dbContext.Add(manager);
@@ -157,6 +160,7 @@ namespace SystemMenu.Controllers
         {
             if (ModelState.IsValid)
             {
+                manger.Password = DesEncryptHelper.DesEncrypt(manger.Password);
                 _dbContext.Update(manger);
                 if (await _dbContext.SaveChangesAsync() > 0)
                     return Json(new { success = true, msg = "修改成功" });

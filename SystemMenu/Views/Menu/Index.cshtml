@@ -48,8 +48,8 @@
             treetable.render({
                 treeColIndex: 1,
                 treeSpid: 0,//最上级的父级Id
-                treeIdName: 'id',
-                treePidName: 'pid',
+                treeIdName: 'Id',
+                treePidName: 'Pid',
                 elem: '#munu-table',
                 url: '/Menu/GetMenuList',
                 treeDefaultClose: true,     //是否默认折叠
@@ -57,10 +57,10 @@
                 page: false,
                 cols: [[
                     { type: 'numbers' },
-                    { field: 'title', minWidth: 200, title: '权限名称' },
-                    { field: 'target', title: '权限标识' },
-                    { field: 'href', title: '菜单url' },
-                    { field: 'sort', width: 80, align: 'center', title: '排序号' },
+                    { field: 'Title', minWidth: 200, title: '权限名称' },
+                    { field: 'Target', title: '权限标识' },
+                    { field: 'Href', title: '菜单url' },
+                    { field: 'Sort', width: 80, align: 'center', title: '排序号' },
                     //{
                     //    field: 'isMenu', width: 80, align: 'center', templet: function (d) {
                     //        if (d.isMenu == 1) {

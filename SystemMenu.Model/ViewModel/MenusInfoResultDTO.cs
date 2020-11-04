@@ -12,17 +12,17 @@ namespace SystemMenu.Model.ViewModel
         /// <summary>
         /// 权限菜单树
         /// </summary>
-        public List<SysTemMenus> MenuInfo { get; set; }
+        public List<SysTemMenus> menuInfo { get; set; }
 
         /// <summary>
         /// logo
         /// </summary>
-        public LogoInfo LogoInfo { get; set; } 
+        public LogoInfo logoInfo { get; set; } 
 
         /// <summary>
         /// Home
         /// </summary>
-        public HomeInfo HomeInfo { get; set; }
+        public HomeInfo homeInfo { get; set; }
 
        
     }

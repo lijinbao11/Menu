@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SystemMenu.Helper;
 using SystemMenu.Model;
 using SystemMenu.Model.Entities.Permission;
 using SystemMenu.Model.ViewModel;
@@ -57,10 +58,11 @@ namespace SystemMenu.Controllers
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
+            var pwd = DesEncryptHelper.DesEncrypt(password);
             var managers = _dbContext.managers.Where(c => c.Account == username && c.IsEnable == true).ToList();
             if (managers.Count() == 0)
                 return Json(new { success = false, msg = "用户不存在，请联系管理员" });
-            if (!managers.FirstOrDefault().Password.Equals(password))
+            if (!managers.FirstOrDefault().Password.Equals(pwd))
                 return Json(new { success = false, msg = "密码错误，请重新输入" });
             //登录成功,执行将用户名存储到session  每登录一次记录一次
             //将用户名存储到session
@@ -118,22 +120,20 @@ namespace SystemMenu.Controllers
         {
             SysTemMenus rootNode = new SysTemMenus()
             {
-                Id = 0,
-                Icon = "",
-                Href = "",
-                Title = "根目录",
+                id = 0,
+                icon = "",
+                href = "",
+                title = "根目录",
             };
             var systemMenuEntities = _dbContext.systemMenus.Where(s => s.Id > 0).ToList();
 
             //将rootNode的Child 赋值返回给 MenusInfoResultDTO.MenuInfo 返回给前端就行
-
-
             MenusInfoResultDTO menusInfoResultDTO = new MenusInfoResultDTO()
             {
-                MenuInfo = GetTreeNodeListByNoLockedDTOArray(systemMenuEntities, rootNode),
+                menuInfo = GetTreeNodeListByNoLockedDTOArray(systemMenuEntities, rootNode),
                 //rootNode.Child,
-                LogoInfo = new LogoInfo(),
-                HomeInfo = new HomeInfo()
+                logoInfo = new LogoInfo(),
+                homeInfo = new HomeInfo()
             };
             return Json(menusInfoResultDTO);
         }
@@ -148,29 +148,29 @@ namespace SystemMenu.Controllers
             {
                 return null;
             }
-            var childreDataList = systemMenuEntities.Where(p => p.Pid == rootNode.Id);
+            var childreDataList = systemMenuEntities.Where(p => p.Pid == rootNode.id);
             if (childreDataList != null && childreDataList.Count() > 0)
             {
-                rootNode.Child = new List<SysTemMenus>();
+                rootNode.child = new List<SysTemMenus>();
 
                 foreach (var item in childreDataList)
                 {
                     SysTemMenus treeNode = new SysTemMenus()
                     {
-                        Id = item.Id,
-                        Icon = item.Icon,
-                        Href = item.Href,
-                        Title = item.Title,
+                        id = item.Id,
+                        icon = item.Icon,
+                        href = item.Href,
+                        title = item.Title,
                     };
-                    rootNode.Child.Add(treeNode);
+                    rootNode.child.Add(treeNode);
                 }
 
-                foreach (var item in rootNode.Child)
+                foreach (var item in rootNode.child)
                 {
                     GetTreeNodeListByNoLockedDTOArray(systemMenuEntities, item);
                 }
             }
-            return rootNode.Child;
+            return rootNode.child;
         }
         #endregion
     }
