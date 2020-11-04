@@ -20,7 +20,7 @@ namespace SystemMenu.Model.ViewModel
         public LogoInfo logoInfo { get; set; } 
 
         /// <summary>
-        /// Home
+        /// Home   
         /// </summary>
         public HomeInfo homeInfo { get; set; }
 
