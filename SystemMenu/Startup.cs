@@ -51,7 +51,7 @@ namespace SystemMenu
                 ).AddJsonOptions(
                 options =>
                 {
-                    //options.JsonSerializerOptions.PropertyNamingPolicy = null;//更正json返回首字母小写
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;//更正json返回首字母小写
                     options.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
                 });
 

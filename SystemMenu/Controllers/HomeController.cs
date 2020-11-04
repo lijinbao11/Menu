@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SystemMenu.Helper;
 using SystemMenu.Model;
 using SystemMenu.Model.Entities.Permission;
 using SystemMenu.Model.ViewModel;
@@ -57,10 +58,11 @@ namespace SystemMenu.Controllers
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
+            var pwd = DesEncryptHelper.DesEncrypt(password);
             var managers = _dbContext.managers.Where(c => c.Account == username && c.IsEnable == true).ToList();
             if (managers.Count() == 0)
                 return Json(new { success = false, msg = "用户不存在，请联系管理员" });
-            if (!managers.FirstOrDefault().Password.Equals(password))
+            if (!managers.FirstOrDefault().Password.Equals(pwd))
                 return Json(new { success = false, msg = "密码错误，请重新输入" });
             //登录成功,执行将用户名存储到session  每登录一次记录一次
             //将用户名存储到session
