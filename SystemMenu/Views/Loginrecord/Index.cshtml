@@ -50,15 +50,15 @@
                     icon: 'layui-icon-tips'
                 }],
                 limits: [5,10, 15, 20, 25, 50, 100],
-                limit: 5,
-                page: true,
+                limit: 15,
+                page: false,
                 skin: 'line',
                 cols: [[
                     { type: "checkbox", width: 50 },
                     { field: 'Id', width: 80, title: 'ID', sort: true },
                     { field: 'Account', width: 80, title: '用户名' },
                     { field: 'IPconfig', width: 100, title: 'IP地址' },
-                    { field: 'CoMport', width: 100, title: '端口号' },
+                    { field: 'COMport', width: 100, title: '端口号' },
                     { field: 'CreateTime', width: 150, title: '登录时间' },
                     
 
@@ -90,14 +90,14 @@
                         maxmin: true,
                         shadeClose: true,
                         area: ['100%', '100%'],
-                        content: '/Manager/Edit/' + data.id,
+                        content: '/Manager/Edit/' + data.Id,
                     });
                     $(window).on("resize", function () {
                         layer.full(index);
                     });
                     return false;
                 } else if (obj.event === 'delete') {
-                    layer.msg('删除' + data.id);
+                    layer.msg('删除' + data.Id);
                     layer.confirm('确定删除这行数据么?', function (index) {
                         $.get('/Manager/Delete/' + data.id,
                             function (result) {

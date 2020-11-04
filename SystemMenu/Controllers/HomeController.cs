@@ -32,12 +32,16 @@ namespace SystemMenu.Controllers
         {
             return View();
         }
+        public IActionResult Default()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
             //获取登录的用户
             var username = HttpContext.Session.GetString("username");
             ViewBag.Account = username;
-            //如果session是否为空 如果是空则返回到主页面
+            //判断session是否为空 如果是空则返回到主页面
             if (string.IsNullOrWhiteSpace(username))
             {
                 ViewBag.IsLogin = false;
@@ -49,12 +53,9 @@ namespace SystemMenu.Controllers
             }
             return View();
         }
-        public IActionResult Default()
-        {
-            return View();
-        }
+       
 
-        #region 登录
+        #region 登  录
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
@@ -67,10 +68,13 @@ namespace SystemMenu.Controllers
             //登录成功,执行将用户名存储到session  每登录一次记录一次
             //将用户名存储到session
             HttpContext.Session.SetString("username", username);
+            HttpContext.Session.SetInt32("mid", managers.FirstOrDefault().Id);
             //将用户ID传给添加登录日志的方法
             AddLoginrecord(managers.FirstOrDefault().Id);
             return Json(new { success = true, msg = "登录成功" });
-            //#region 生成cookie
+
+
+            #region 生成cookie   暂且没用
             //var claimIdentity = new ClaimsIdentity("Cookie", JwtClaimTypes.Name, JwtClaimTypes.Role);
             //claimIdentity.AddClaims(new List<Claim>()
             //    {
@@ -78,9 +82,11 @@ namespace SystemMenu.Controllers
             //        new Claim(JwtClaimTypes.Name,managers.FirstOrDefault().Account),
             //        //new Claim(JwtClaimTypes.Email,user.Email)
             //    });
-            //#endregion
+            
             //var claimPrincipal = new ClaimsPrincipal(claimIdentity);
             //HttpContext.SignInAsync(claimPrincipal);
+            #endregion
+            
         }
         /// <summary>
         /// 登录日志
@@ -104,7 +110,8 @@ namespace SystemMenu.Controllers
         }
 
         #endregion
-        #region 登出
+
+        #region 登  出
         [HttpGet]
         public  IActionResult LoginOut()
         {
@@ -114,6 +121,7 @@ namespace SystemMenu.Controllers
 
 
         #endregion
+
         #region 菜单权限
         [HttpGet]
         public IActionResult GetMenuList()

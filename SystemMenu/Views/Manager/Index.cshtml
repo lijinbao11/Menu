@@ -60,7 +60,7 @@
                 { field: 'Password', width: 100, title: '密码' },
                 { field: 'CreateTime', width: 150, title: '创建时间' },
                 {field: 'IsEnable', width: 80, align: 'center', templet: function (d) {
-                        if (d.isEnable == false) {
+                        if (d.IsEnable == false) {
                             return '<span class="layui-badge layui-bg-gray">否</span>';
                         }
                         else {
@@ -119,7 +119,7 @@
                 var listId = [];
                 //进行遍历所选中行数据,拿出每一行的ID进行存储到数组中 
                 $.each(datas, function (i,data) {
-                    listId.push(data.id)
+                    listId.push(data.Id)
                 });
                 if (listId.length <= 0) {
                     layer.msg("请选择要删除的行", { icon: 2 })
@@ -161,16 +161,16 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/Manager/Edit/' +data.id,
+                    content: '/Manager/Edit/' +data.Id,
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.msg('删除' + data.id);
+                layer.msg('删除' + data.Id);
                 layer.confirm('确定删除这行数据么?', function (index) {
-                    $.get('/Manager/Delete/' + data.id,
+                    $.get('/Manager/Delete/' + data.Id,
                         function (result) {
                             if (result.success) {
                                 layer.alert(result.msg, { icon: 1 }, function () {

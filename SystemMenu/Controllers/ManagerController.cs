@@ -17,14 +17,13 @@ namespace SystemMenu.Controllers
 
         public ManagerController(SystemMenuDBContext dbContext)
         {
-
             _dbContext = dbContext;
         }
         public IActionResult Index()
         {
             return View();
         }
-
+        #region 查询
         //[HttpGet]
         //public IActionResult GetManagers()
         //{
@@ -52,8 +51,7 @@ namespace SystemMenu.Controllers
                 
         }
 
-       
-
+        #endregion 
 
         #region 添加
         public IActionResult Add()
@@ -125,27 +123,11 @@ namespace SystemMenu.Controllers
         #endregion
 
         #region 修改
-        /// <summary>
-        /// 修改 查询ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        //public IActionResult Edit(int id)
-        //{
-        //    //var manager = _dbContext.managers.FindAsync(id);
-        //    var manager = _dbContext.managers.Where(c => c.Id == id).FirstOrDefault();
-        //    if (manager == null)
-        //    {
-        //        return Redirect("/Home/Index");
-        //    }
-        //    return View(manager);
-        //}
-        
-        
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var manager = await _dbContext.managers.FindAsync(id);
+            manager.Password = DesEncryptHelper.DesDecrypt(manager.Password);
             if (manager == null)
                 return Redirect("/Home/Index");
             return View(manager);
@@ -170,6 +152,23 @@ namespace SystemMenu.Controllers
 
         }
 
+
+
+        /// <summary>
+        /// 修改 查询ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        //public IActionResult Edit(int id)
+        //{
+        //    //var manager = _dbContext.managers.FindAsync(id);
+        //    var manager = _dbContext.managers.Where(c => c.Id == id).FirstOrDefault();
+        //    if (manager == null)
+        //    {
+        //        return Redirect("/Home/Index");
+        //    }
+        //    return View(manager);
+        //}
 
         #endregion
     }
