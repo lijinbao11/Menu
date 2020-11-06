@@ -155,6 +155,8 @@
                 }
             });
 
+            var post_flag = false;//设置一个对象来控制是否进入AJAX过程
+
             // 进行登录操作
             form.on('submit(login)', function (data) {
                 data = data.field;
@@ -166,10 +168,11 @@
                     layer.msg('密码不能为空');
                     return false;
                 }
-                //if (data.captcha == '') {
-                //    layer.msg('验证码不能为空');
-                //    return false;
-                //}
+                //如果正在提交则直接返回，停止执行
+                if (post_flag) {
+                    alert("请勿频繁点击");
+                } return;
+                post_flag = true;//标记当前状态为正在提交状态
                 $.ajax({
                     type: "POST",
                     url: "/Home/Login",
@@ -178,13 +181,14 @@
                         if (msg.success) {
                             window.location.href = "/Home/Index";
                         } else {
+                            post_flag = false; //AJAX失败也需要将标志标记为可提交状态
                             layer.msg(msg.msg);
                         }
                     }
-                })
-                return false;
+                });
                 return false;
             });
-        });</script>
+        });
+    </script>
 </body>
 </html>

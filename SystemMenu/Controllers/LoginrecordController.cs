@@ -38,7 +38,7 @@ namespace SystemMenu.Controllers
             //pageHelper.Count = await _dbContext.loginrecords.CountAsync();
             var data = await (from n in _dbContext.loginrecords
                               join t in _dbContext.managers
-                              on n.Mid equals t.Id
+                              on n.Mid equals t.Id   
                               into n1
                               from t1 in n1.DefaultIfEmpty()
                               where t1.Id == mid
@@ -51,7 +51,7 @@ namespace SystemMenu.Controllers
                                   CreateTime = n.CreateTime
                               }).ToListAsync();
 
-            return new JsonResult(new { code = 0, msg = "",  data });
+            return new JsonResult(new { code = 0, msg = "", data });
         }
 
         #endregion

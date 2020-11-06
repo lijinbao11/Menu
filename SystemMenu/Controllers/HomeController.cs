@@ -66,11 +66,13 @@ namespace SystemMenu.Controllers
             if (!managers.FirstOrDefault().Password.Equals(pwd))
                 return Json(new { success = false, msg = "密码错误，请重新输入" });
             //登录成功,执行将用户名存储到session  每登录一次记录一次
+            var mid = managers.FirstOrDefault().Id;
             //将用户名存储到session
             HttpContext.Session.SetString("username", username);
-            HttpContext.Session.SetInt32("mid", managers.FirstOrDefault().Id);
+            HttpContext.Session.SetInt32("mid", mid);
             //将用户ID传给添加登录日志的方法
-            AddLoginrecord(managers.FirstOrDefault().Id);
+            
+            AddLoginrecord(mid);
             return Json(new { success = true, msg = "登录成功" });
 
 
@@ -92,11 +94,11 @@ namespace SystemMenu.Controllers
         /// 登录日志
         /// </summary>
         /// <param name="id">用户ID</param>
-        private void AddLoginrecord(int id)
-        {
-            Loginrecord loginrecord = new Loginrecord();
+        public void AddLoginrecord(int id)
+        { 
             if (ModelState.IsValid)
             {
+                Loginrecord loginrecord = new Loginrecord();
                 //Request.HttpContext.Connection.RemoteIpAddress.ToString()  IPV6
                 //Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
                 loginrecord.IPconfig = Request.HttpContext.Connection.LocalIpAddress.MapToIPv4().ToString();
